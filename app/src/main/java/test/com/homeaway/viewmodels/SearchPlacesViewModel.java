@@ -77,6 +77,14 @@ public class SearchPlacesViewModel extends ViewModel {
             return;
         }
 
+        if(query.getValue() != null &&
+           query.getValue().equals(newQuery) &&
+           venueList.getValue() != null) {
+
+            Log.w(TAG, "We may have already published result for " + newQuery);
+            return;
+        }
+
         query.setValue(newQuery);
         repository.fetchVenues(query, venueList, errorMessage, progress);
     }

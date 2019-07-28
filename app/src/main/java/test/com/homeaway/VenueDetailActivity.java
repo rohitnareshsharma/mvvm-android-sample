@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.os.PersistableBundle;
+import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -24,6 +25,8 @@ import test.com.homeaway.models.Venue;
 import test.com.homeaway.viewmodels.VenueDetailViewModel;
 
 public class VenueDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private static final String TAG = VenueDetailActivity.class.getSimpleName();
 
     private GoogleMap mMap;
 
@@ -44,6 +47,15 @@ public class VenueDetailActivity extends AppCompatActivity implements OnMapReady
         Venue venue = EventBus.getDefault().removeStickyEvent(Venue.class);
         if(venue != null) {
             venueDetailViewModel.setVenue(venue);
+        }
+
+        // still check for valid model.
+        // Android may recreate activities without data.
+        // Safe check for preventing crash and gracefully handling this
+        if(venueDetailViewModel.getModel() == null) {
+            Log.e(TAG, "This should not have happened. venueDetailViewModel is null");
+            finish();
+            return;
         }
 
         binding.setVenueModel(venueDetailViewModel.getModel());

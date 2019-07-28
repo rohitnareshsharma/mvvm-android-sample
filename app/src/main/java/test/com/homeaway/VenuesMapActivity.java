@@ -57,6 +57,15 @@ public class VenuesMapActivity extends AppCompatActivity implements OnMapReadyCa
             venueMapViewModel.setListOfVenues(event.getVenueList());
         }
 
+        // still check for valid model.
+        // Android may recreate activities without data.
+        // Safe check for preventing crash and gracefully handling this
+        if(venueMapViewModel.getListOfVenues() == null) {
+            Log.e(TAG, "This should not have happened. venueMapViewModel.getListOfVenues() is null");
+            finish();
+            return;
+        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
