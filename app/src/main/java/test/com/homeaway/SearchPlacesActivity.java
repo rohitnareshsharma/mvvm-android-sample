@@ -215,7 +215,11 @@ public class SearchPlacesActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            // Save the query in db for later use
+            // Save the query in db for later use.
+            // Currently this is saving suggestion only when ok is pressed on query
+            // As we are using a text change listener we should save all words results.
+            // That may bombard suggestions. Need to think around on this functionality.
+            // FIXME
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
                     MySuggestionProvider.AUTHORITY,
                     MySuggestionProvider.MODE);
