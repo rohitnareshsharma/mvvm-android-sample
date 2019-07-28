@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 import test.com.homeaway.livedata.SingleEventMutableLiveData;
 import test.com.homeaway.models.Venue;
-import test.com.homeaway.repositories.PlacesRepository;
+import test.com.homeaway.repositories.VenuesRepository;
 
 /**
  * ViewModel associated with {@link test.com.homeaway.SearchPlacesActivity} screen.
@@ -21,7 +21,7 @@ public class SearchPlacesViewModel extends ViewModel {
     private static final String TAG = SearchPlacesViewModel.class.getSimpleName();
 
     // Main repository responsible for fetching data for this viewmodel
-    private PlacesRepository repository = new PlacesRepository();
+    private VenuesRepository repository = new VenuesRepository();
 
     // Current search query in the system. It's important to keep track of it to avoid
     // redundant calls

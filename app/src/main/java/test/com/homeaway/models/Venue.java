@@ -1,6 +1,10 @@
 package test.com.homeaway.models;
 
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.List;
 
 /**
@@ -87,10 +91,13 @@ import java.util.List;
  *             "hasPerk":false
  *   }
  */
+@Entity
 public class Venue {
 
+    @PrimaryKey
     public String id;
 
+    @ColumnInfo(name = "name")
     public String name;
 
     public Location location;

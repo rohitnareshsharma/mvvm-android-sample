@@ -6,10 +6,18 @@ import com.easyvolley.NetworkClient;
 
 public class HomeAwayApplication extends Application {
 
+
+    private static HomeAwayApplication INSTANCE;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        INSTANCE = this;
         NetworkClient.init(this);
+    }
+
+    public static Context getAppContext() {
+        return INSTANCE.getAppContext();
     }
 
 }
