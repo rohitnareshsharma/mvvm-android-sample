@@ -3,6 +3,7 @@ package test.com.homeaway;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -12,6 +13,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.provider.SearchRecentSuggestions;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import test.com.homeaway.adapters.SearchListAdapter;
 import test.com.homeaway.databinding.ActivitySearchPlacesBinding;
 import test.com.homeaway.events.LaunchVenuesMapEvent;
+import test.com.homeaway.provider.MySuggestionProvider;
 import test.com.homeaway.viewmodels.SearchPlacesViewModel;
 
 /**
@@ -44,6 +47,9 @@ public class SearchPlacesActivity extends AppCompatActivity {
 
     // Binding carrying all the views for this screen
     private ActivitySearchPlacesBinding activityMainBinding;
+
+    // Search Bar View
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,11 +127,26 @@ public class SearchPlacesActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_clear_suggestion : {
+                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                        MySuggestionProvider.AUTHORITY,
+                        MySuggestionProvider.MODE);
+                suggestions.clearHistory();
+                break;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setupSearchWidget(Menu menu) {
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) item.getActionView();
+        searchView = (SearchView) item.getActionView();
 
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -137,6 +158,8 @@ public class SearchPlacesActivity extends AppCompatActivity {
         item.expandActionView();
 
         // place of setting this text change listener is important
+        // Comment this line below if we want to enable search only when
+        // go is pressed
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -149,13 +172,35 @@ public class SearchPlacesActivity extends AppCompatActivity {
             }
         });
 
+        // Set the suggestion listener.
+        // default one was not setting the text right and was using intent approach
+        // we are overriding this behaviour.
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                return true;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                Cursor cursor= searchView.getSuggestionsAdapter().getCursor();
+                cursor.moveToPosition(position);
+                // 2 is the index of col containing suggestion name.
+                // This is a dangerous assumption. FIXME
+                String suggestion = cursor.getString(2);
+                searchView.setQuery(suggestion,true);
+                return true;
+            }
+        });
+
         // Set any previous query if we have
         searchView.setQuery(previousQuery,false);
 
         // Hide the keyboard by default
         searchView.clearFocus();
-
     }
+
 
     // As this is a searchable activity with singleTop Launch mode
     // we need to handle incoming intent.
@@ -169,6 +214,14 @@ public class SearchPlacesActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+
+            // Save the query in db for later use
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    MySuggestionProvider.AUTHORITY,
+                    MySuggestionProvider.MODE);
+            suggestions.saveRecentQuery(query, null);
+
+            // Ask repository to fetch venue list for given query
             viewModel.search(query);
         }
     }
