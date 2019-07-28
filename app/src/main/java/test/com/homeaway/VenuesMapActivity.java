@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -29,16 +30,25 @@ import test.com.homeaway.models.Venue;
 import test.com.homeaway.viewmodels.VenueDetailViewModel;
 import test.com.homeaway.viewmodels.VenueMapViewModel;
 
+/**
+ * A simple full screen activity displaying a list of venue.
+ * Its a raw screen for now. If you will click on a map marker
+ * it will launch {@link VenueDetailActivity} class for the selected
+ * marker.
+ */
 public class VenuesMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = VenuesMapActivity.class.getSimpleName();
 
-    private GoogleMap mMap;
-
+    // View model associated with this activity.
     private VenueMapViewModel venueMapViewModel;
+
+    private GoogleMap mMap;
 
     private SupportMapFragment mapFragment;
 
+    // Mapping displayed Venue with marker id.
+    // This is done to launch detail activity once a marker is clicked
     private HashMap<String, Venue> markerVenueMap = new HashMap<>();
 
     @Override
@@ -113,6 +123,7 @@ public class VenuesMapActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
+        // Set the info window and launch Venue detail activity once it is clicked
         mMap.setOnInfoWindowClickListener(marker -> {
             if(marker != null) {
                 Venue venue = markerVenueMap.get(marker.getId());
@@ -138,16 +149,18 @@ public class VenuesMapActivity extends AppCompatActivity implements OnMapReadyCa
         // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
         // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        // Hide the nav bar and status bar
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_IMMERSIVE
+                            // Set the content to appear under the system bars so that the
+                            // content doesn't resize when the system bars hide and show.
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            // Hide the nav bar and status bar
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        }
     }
 
 }

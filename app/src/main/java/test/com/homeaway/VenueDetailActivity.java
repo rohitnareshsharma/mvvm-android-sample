@@ -24,16 +24,24 @@ import test.com.homeaway.databinding.ActivityVenueDetailBinding;
 import test.com.homeaway.models.Venue;
 import test.com.homeaway.viewmodels.VenueDetailViewModel;
 
+/**
+ * It's a simple activity displaying one venue detail.
+ * There will be two markers displayed over the screen.
+ * One for the selected venue and one for the center of seatle.
+ *
+ * Center of seatle is hardcoded for now. But that's ok. Just a test.
+ */
 public class VenueDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = VenueDetailActivity.class.getSimpleName();
 
-    private GoogleMap mMap;
-
+    // View model associated with VenueDetailActivity. It carries very minimum items for now.
+    // We have reused VenueViewModel here
     private VenueDetailViewModel venueDetailViewModel;
 
-    private SupportMapFragment mapFragment;
+    private GoogleMap mMap;
 
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +60,17 @@ public class VenueDetailActivity extends AppCompatActivity implements OnMapReady
         // still check for valid model.
         // Android may recreate activities without data.
         // Safe check for preventing crash and gracefully handling this
-        if(venueDetailViewModel.getModel() == null) {
+        if(venueDetailViewModel.getVenueModel() == null) {
             Log.e(TAG, "This should not have happened. venueDetailViewModel is null");
             finish();
             return;
         }
 
-        binding.setVenueModel(venueDetailViewModel.getModel());
+        binding.setVenueModel(venueDetailViewModel.getVenueModel());
 
         // Setup title bar
         setSupportActionBar(binding.toolbar);
-        setTitle(venueDetailViewModel.getModel().getName());
+        setTitle(venueDetailViewModel.getVenueModel().getName());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -98,7 +106,7 @@ public class VenueDetailActivity extends AppCompatActivity implements OnMapReady
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        Venue venue = venueDetailViewModel.getModel().getVenue();
+        Venue venue = venueDetailViewModel.getVenueModel().getVenue();
         LatLng venueLocation = new LatLng(venue.location.lat, venue.location.lng);
         Marker marker = mMap.addMarker(new MarkerOptions().position(venueLocation).title(venue.name));
 

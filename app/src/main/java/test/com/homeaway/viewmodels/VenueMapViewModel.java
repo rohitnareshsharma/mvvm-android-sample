@@ -6,9 +6,13 @@ import java.util.List;
 
 import test.com.homeaway.models.Venue;
 
+/**
+ * ViewModel associated with {@link test.com.homeaway.VenuesMapActivity} class.
+ * It carries only list of venues for now.
+ */
 public class VenueMapViewModel extends ViewModel {
 
-    List<Venue> listOfVenues;
+    private List<Venue> listOfVenues;
 
     public List<Venue> getListOfVenues() {
         return listOfVenues;

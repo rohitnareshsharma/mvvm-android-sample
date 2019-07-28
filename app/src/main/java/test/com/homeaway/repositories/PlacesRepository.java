@@ -15,6 +15,9 @@ import java.util.List;
 import test.com.homeaway.models.SearchVenueResponseWrapper;
 import test.com.homeaway.models.Venue;
 
+/**
+ * Main repository preparing the Venue list data.
+ */
 public class PlacesRepository {
 
     private static final String TAG = PlacesRepository.class.getSimpleName();

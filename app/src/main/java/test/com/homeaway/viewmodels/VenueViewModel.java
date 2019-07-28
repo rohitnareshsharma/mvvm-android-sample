@@ -7,6 +7,11 @@ import androidx.databinding.Bindable;
 
 import test.com.homeaway.models.Venue;
 
+/**
+ * ViewModel representing one venue related data only.
+ * It is used in {@link test.com.homeaway.adapters.SearchListAdapter} class
+ * for each of the row displayed
+ */
 public class VenueViewModel extends BaseObservable {
 
     private Venue mVenue;

@@ -22,9 +22,6 @@ import test.com.homeaway.viewmodels.VenueViewModel;
  */
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.SearchResultViewHolder> {
 
-    // For logging purpose
-    private static String TAG = SearchListAdapter.class.getSimpleName();
-
     // Inflator service for creating views from xml
     private LayoutInflater mInflator;
 
