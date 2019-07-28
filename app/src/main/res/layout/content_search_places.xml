@@ -7,6 +7,7 @@
     tools:context=".SearchPlacesActivity">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="test.com.homeaway.viewmodels.SearchPlacesViewModel" />
@@ -28,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="@{viewModel.progress}"
+            android:visibility="@{safeUnbox(viewModel.progress) ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -40,13 +41,13 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:visibility="@{viewModel.listVisibility}"
             app:adapter="@{adapter}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="@{ (viewModel.venueList == null || viewModel.venueList.size() == 0) ? View.INVISIBLE : View.VISIBLE }" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,9 +59,9 @@
             app:layout_constraintTop_toTopOf="parent"
             android:drawablePadding="8dp"
             android:gravity="center"
-            android:visibility="@{viewModel.emptyViewVisibility}"
             android:drawableStart="@android:drawable/ic_menu_myplaces"
-            android:text="@string/empty_list_message" />
+            android:text="@string/empty_list_message"
+            android:visibility="@{ (viewModel.venueList == null || viewModel.venueList.size() == 0) ? View.VISIBLE : View.INVISIBLE }" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

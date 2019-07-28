@@ -26,14 +26,23 @@ import test.com.homeaway.databinding.ActivitySearchPlacesBinding;
 import test.com.homeaway.events.LaunchVenuesMapEvent;
 import test.com.homeaway.viewmodels.SearchPlacesViewModel;
 
+/**
+ * Main dashboard for allowing user to search for places around
+ * center of seattle. Its a searchable activity with single top
+ * launch mode
+ */
 public class SearchPlacesActivity extends AppCompatActivity {
 
+    // For logging purpose
     private static final String TAG = SearchPlacesActivity.class.getSimpleName();
 
+    // Main viewmodel associated with this activity
     private SearchPlacesViewModel viewModel;
 
+    // Adapter for the search results list
     private SearchListAdapter adapter;
 
+    // Binding carrying all the views for this screen
     private ActivitySearchPlacesBinding activityMainBinding;
 
     @Override
@@ -59,8 +68,9 @@ public class SearchPlacesActivity extends AppCompatActivity {
         activityMainBinding.executePendingBindings();
 
 
+        // If we have results display them in a map
         activityMainBinding.fab.setOnClickListener(view -> {
-            EventBus.getDefault().postSticky(new LaunchVenuesMapEvent(viewModel.getVenueList().getValue()));
+            EventBus.getDefault().postSticky(new LaunchVenuesMapEvent(viewModel.venueList.getValue()));
             Intent intent = new Intent(this, VenuesMapActivity.class);
             startActivity(intent);
         });
@@ -68,11 +78,11 @@ public class SearchPlacesActivity extends AppCompatActivity {
     }
 
     private void initObservers() {
-        viewModel.getVenueList().observe(this, venues -> {
+        viewModel.venueList.observe(this, venues -> {
             // Set the data to the list
             adapter.setData(venues);
 
-            // Control the visibility of floating button on the basis of
+            // Control the visibility of floating button on the basis of venue list size
             if(venues != null && venues.size() > 0 ) {
                 activityMainBinding.fab.show();
             } else {
@@ -80,7 +90,8 @@ public class SearchPlacesActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getErrorMessage().observe(this, s -> {
+        // Do monitor error cases
+        viewModel.errorMessage.observe(this, s -> {
             Log.e(TAG, s + "");
 
             Snackbar.make(activityMainBinding.fab
@@ -89,17 +100,14 @@ public class SearchPlacesActivity extends AppCompatActivity {
                     .show();
         });
 
-        viewModel.getSelectedVenue().observe(this, venue -> {
+        // Launch venue detail activity once user select one from the list
+        viewModel.selectedVenue.observe(this, venue -> {
             EventBus.getDefault().postSticky(venue);
             Intent intent = new Intent(this, VenueDetailActivity.class);
             this.startActivity(intent);
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,11 +131,12 @@ public class SearchPlacesActivity extends AppCompatActivity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         // See if we have any previous query
-        final String previousQuery = viewModel.getQuery().getValue();
+        final String previousQuery = viewModel.query.getValue();
 
         // Expand the view by default. This will going to clear viewModel.getQuery string
         item.expandActionView();
 
+        // place of setting this text change listener is important
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -148,12 +157,15 @@ public class SearchPlacesActivity extends AppCompatActivity {
 
     }
 
+    // As this is a searchable activity with singleTop Launch mode
+    // we need to handle incoming intent.
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
         handleIntent(intent);
     }
 
+    // Check for search action
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);

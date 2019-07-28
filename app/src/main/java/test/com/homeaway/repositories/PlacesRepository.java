@@ -1,7 +1,6 @@
 package test.com.homeaway.repositories;
 
 import android.util.Log;
-import android.view.View;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -48,7 +47,7 @@ public class PlacesRepository {
     public void fetchVenues(final MutableLiveData<String> query,
                             final MutableLiveData<List<Venue>> list,
                             final MutableLiveData<String> errorMessage,
-                            final MutableLiveData<Integer> progress) {
+                            final MutableLiveData<Boolean> progress) {
 
         // Cancel any previous request if requested.
         // This be important for saving extra calls
@@ -62,7 +61,7 @@ public class PlacesRepository {
         // results of requested query only.
         final String queryString = query.getValue();
 
-        progress.setValue(View.VISIBLE);
+        progress.setValue(true);
         currentSearchRequest = NetworkClient.get(VENUUE_SEARCH_URL)
                 .addQueryParam("client_id", CLIENT_ID)
                 .addQueryParam("client_secret", CLIENT_SECRET)
@@ -82,7 +81,7 @@ public class PlacesRepository {
                             Log.d(TAG, "Received results are no longer required as query string has changed");
                         }
 
-                        progress.setValue(View.INVISIBLE);
+                        progress.setValue(false);
                         currentSearchRequest = null;
                     }
 
@@ -92,7 +91,7 @@ public class PlacesRepository {
                         errorMessage.setValue(error.mMessage == null ?
                                               "Something went wrong in fetchVenues function":
                                               error.mMessage);
-                        progress.setValue(View.INVISIBLE);
+                        progress.setValue(false);
                         currentSearchRequest = null;
                     }
                 }).execute();

@@ -3,11 +3,8 @@ package test.com.homeaway.viewmodels;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
@@ -15,48 +12,42 @@ import test.com.homeaway.livedata.SingleEventMutableLiveData;
 import test.com.homeaway.models.Venue;
 import test.com.homeaway.repositories.PlacesRepository;
 
+/**
+ * ViewModel associated with {@link test.com.homeaway.SearchPlacesActivity} screen.
+ */
 public class SearchPlacesViewModel extends ViewModel {
 
+    // For logging purpose
     private static final String TAG = SearchPlacesViewModel.class.getSimpleName();
 
+    // Main repository responsible for fetching data for this viewmodel
     private PlacesRepository repository = new PlacesRepository();
 
-    private MutableLiveData<String> query = new MutableLiveData<>();
+    // Current search query in the system. It's important to keep track of it to avoid
+    // redundant calls
+    public MutableLiveData<String> query = new MutableLiveData<>();
 
-    private MutableLiveData<List<Venue>> venueList = new MutableLiveData<List<Venue>>(){{
+    // Main data set representing the list of venues against current query.
+    public MutableLiveData<List<Venue>> venueList = new MutableLiveData<List<Venue>>(){{
         // Init it with null
         setValue(null);
     }};
 
-    private SingleEventMutableLiveData<Venue> selectedVenue = new SingleEventMutableLiveData<>();
-
-    private SingleEventMutableLiveData<String> errorMessage = new SingleEventMutableLiveData<>();
-
-    public MutableLiveData<String> getQuery() {
-        return query;
-    }
-
-    public MutableLiveData<Venue> getSelectedVenue() {
-        return selectedVenue;
-    }
-
-    public MutableLiveData<Integer> progress = new MutableLiveData<Integer>() {{
-        setValue(View.INVISIBLE); // 4 for invisible
+    /**
+     * Returns indicator whether progress is happening or not
+     */
+    public MutableLiveData<Boolean> progress = new MutableLiveData<Boolean>() {{
+        setValue(false);
     }};
 
-    public LiveData<Integer> listVisibility = Transformations.map(venueList, input ->
-            (input == null || input.size() == 0) ? View.INVISIBLE : View.VISIBLE);
 
-    public LiveData<Integer> emptyViewVisibility = Transformations.map(venueList,
-            input -> (input == null || input.size() == 0) ? View.VISIBLE : View.INVISIBLE);
+    // Current selected venue by the user. We do not want observers to trigger
+    // again and again because of lifecycle event. Only to trigger when there is a new value
+    // available. So we used SingleEventMutableLiveData. Its a custom implementation
+    public SingleEventMutableLiveData<Venue> selectedVenue = new SingleEventMutableLiveData<>();
 
-    public MutableLiveData<List<Venue>> getVenueList() {
-        return venueList;
-    }
-
-    public SingleEventMutableLiveData<String> getErrorMessage() {
-        return errorMessage;
-    }
+    // Represent latest error occurred for current query
+    public SingleEventMutableLiveData<String> errorMessage = new SingleEventMutableLiveData<>();
 
     public boolean onQueryTextSubmit(String query) {
         Log.d(TAG, "onQueryTextSubmit() called with " + query);
@@ -69,6 +60,10 @@ public class SearchPlacesViewModel extends ViewModel {
         return false;
     }
 
+    /**
+     * Perform network search against the query submitted
+     * @param newQuery
+     */
     public void search(String newQuery) {
 
         if(newQuery == null || TextUtils.isEmpty(newQuery.trim())) {
