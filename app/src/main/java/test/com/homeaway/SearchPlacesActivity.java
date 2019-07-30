@@ -48,6 +48,9 @@ public class SearchPlacesActivity extends AppCompatActivity {
     // Binding carrying all the views for this screen
     private ActivitySearchPlacesBinding activityMainBinding;
 
+    // SearhView Bar
+    private SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +146,7 @@ public class SearchPlacesActivity extends AppCompatActivity {
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) item.getActionView();
+        searchView = (SearchView) item.getActionView();
 
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -223,7 +226,10 @@ public class SearchPlacesActivity extends AppCompatActivity {
             suggestions.saveRecentQuery(query, null);
 
             // Ask repository to fetch venue list for given query
-            viewModel.search(query);
+            if(searchView != null) {
+                searchView.setQuery(query, false);
+                searchView.clearFocus();
+            }
         }
     }
 }
