@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import test.com.homeaway.models.Venue;
 import test.com.homeaway.room.dao.VenueDao;
 
-@Database(entities = {Venue.class}, version = 1)
+@Database(entities = {Venue.class}, version = 1 , exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract VenueDao venueDao();
 
@@ -21,7 +21,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     // Create database here
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "venue_database")
+                            AppDatabase.class, "venues.db")
                             .build();
                 }
             }

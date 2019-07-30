@@ -126,5 +126,16 @@
             app:layout_constraintStart_toStartOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
+        <ImageView
+            android:id="@+id/iv_favourite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:src="@android:drawable/btn_star_big_on"
+            android:src="@{venueModel.favourite ? @android:drawable/btn_star_big_on : @android:drawable/btn_star_big_off}"
+            android:onClick="@{() -> venueModel.toggleFavourite()}"
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

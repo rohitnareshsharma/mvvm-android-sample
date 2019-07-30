@@ -47,7 +47,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="@{ (viewModel.venueList == null || viewModel.venueList.size() == 0) ? View.INVISIBLE : View.VISIBLE }" />
+            android:visibility="@{ (viewModel.mVenueList == null || viewModel.mVenueList.size() == 0) ? View.INVISIBLE : View.VISIBLE }" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
             android:gravity="center"
             android:drawableStart="@android:drawable/ic_menu_myplaces"
             android:text="@string/empty_list_message"
-            android:visibility="@{ (viewModel.venueList == null || viewModel.venueList.size() == 0) ? View.VISIBLE : View.INVISIBLE }" />
+            android:visibility="@{ (viewModel.mVenueList == null || viewModel.mVenueList.size() == 0) ? View.VISIBLE : View.INVISIBLE }" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,6 +3,7 @@ package test.com.homeaway.viewmodels;
 import androidx.lifecycle.ViewModel;
 
 import test.com.homeaway.models.Venue;
+import test.com.homeaway.repositories.VenuesRepository;
 
 /**
  * ViewModel associated with {@link test.com.homeaway.VenueDetailActivity} class.

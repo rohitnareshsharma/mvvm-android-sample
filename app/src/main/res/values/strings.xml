@@ -6,7 +6,7 @@
     <string name="search">Search</string>
     <string name="clear_suggestion">Clear Suggestions</string>
     <string name="empty_list_message">Go ahead and Give search a try</string>
-    <string name="km_away">Km away from center of Seatle</string>
+    <string name="km_away">Km from Seattle Center</string>
     <string name="title_activity_venue_detail">VenueDetailActivity</string>
 
 </resources>

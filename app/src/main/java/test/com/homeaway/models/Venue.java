@@ -1,8 +1,10 @@
 package test.com.homeaway.models;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.List;
@@ -91,42 +93,54 @@ import java.util.List;
  *             "hasPerk":false
  *   }
  */
-@Entity
+@Entity(tableName = "venues")
 public class Venue {
 
     @PrimaryKey
-    public String id;
+    @NonNull public String id;
 
-    @ColumnInfo(name = "name")
     public String name;
 
+    @Ignore
     public Location location;
 
+    @Ignore
     public List<Category> categories;
 
+    @Ignore
     public boolean verified;
 
+    @Ignore
     public Stat stats;
 
+    @Ignore
     public String url;
 
+    @Ignore
     public boolean allowMenuUrlEdit;
 
+    @Ignore
     public BeenHere beenHere;
 
+    @Ignore
     public Specials specials;
 
+    @Ignore
     public String storeId;
 
+    @Ignore
     public HereNow hereNow;
 
+    @Ignore
     public String referralId;
 
+    @Ignore
     public List<VenueChain> venueChains;
 
+    @Ignore
     public boolean hasPerk;
 
-
+    public boolean favourite;
 
     public class Location {
 

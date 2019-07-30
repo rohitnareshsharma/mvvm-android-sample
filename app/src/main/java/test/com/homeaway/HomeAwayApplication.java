@@ -17,7 +17,7 @@ public class HomeAwayApplication extends Application {
     }
 
     public static Context getAppContext() {
-        return INSTANCE.getAppContext();
+        return INSTANCE.getApplicationContext();
     }
 
 }

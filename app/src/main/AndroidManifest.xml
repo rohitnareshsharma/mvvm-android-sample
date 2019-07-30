@@ -19,13 +19,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
             android:name=".VenueDetailActivity"
             android:label="@string/title_activity_venue_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".VenuesMapActivity"
             android:theme="@style/FullScreen" />
+
         <activity
             android:name=".SearchPlacesActivity"
             android:label="@string/title_activity_search_places"
@@ -46,7 +49,8 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <provider android:name=".provider.MySuggestionProvider"
+        <provider
+            android:name=".provider.MySuggestionProvider"
             android:authorities="test.com.homeaway.provider.MySuggestionProvider" />
         <!--
 
