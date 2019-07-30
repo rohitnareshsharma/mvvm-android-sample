@@ -61,7 +61,7 @@ public class VenuesRepository {
     public VenuesRepository() {
         AppDatabase db = AppDatabase.getDatabase(HomeAwayApplication.getAppContext());
         venueDao = db.venueDao();
-        mFavouriteVenues = venueDao.getAll();
+        mFavouriteVenues = venueDao.getAllFavouriteVenues();
     }
 
     /**
@@ -129,7 +129,7 @@ public class VenuesRepository {
      * -d client_id="CLIENT_ID"  \
      * -d client_secret="CLIENT_SECRET" \
      * -d near="Seattle,+WA" \
-     * -d mQuery="coffee" \
+     * -d query="coffee" \
      * -d v="20180401" \
      * -d limit=20
      */
@@ -146,8 +146,8 @@ public class VenuesRepository {
             currentSearchRequest.cancelRequest();
         }
 
-        // Get the mQuery string. It be required later to verify we are publishing
-        // results of requested mQuery only.
+        // Get the query string. It be required later to verify we are publishing
+        // results of requested query only.
         final String queryString = query.getValue();
         progress.setValue(true);
 
@@ -155,19 +155,19 @@ public class VenuesRepository {
                 .addQueryParam("client_id", CLIENT_ID)
                 .addQueryParam("client_secret", CLIENT_SECRET)
                 .addQueryParam("ll", "47.6062,-122.3321")
-                .addQueryParam("mQuery", query.getValue())
+                .addQueryParam("query", query.getValue())
                 .addQueryParam("v", "20180401")
                 .addQueryParam("limit", "50")
                 .setCallback(new Callback<SearchVenueResponseWrapper>() {
                     @Override
                     public void onSuccess(SearchVenueResponseWrapper v, EasyVolleyResponse response) {
-                        Log.d(TAG, "Received results for mQuery " + queryString);
+                        Log.d(TAG, "Received results for query " + queryString);
 
-                        // Check if the mQuery is not changed. If changed do not publish results
+                        // Check if the query is not changed. If changed do not publish results
                         if (queryString.equals(query.getValue())) {
                             list.setValue(v.response.venues);
                         } else {
-                            Log.d(TAG, "Received results are no longer required as mQuery string has changed");
+                            Log.d(TAG, "Received results are no longer required as query string has changed");
                         }
 
                         progress.setValue(false);

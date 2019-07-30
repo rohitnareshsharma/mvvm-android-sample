@@ -17,7 +17,7 @@ public interface VenueDao {
     @Query("SELECT * FROM venues")
     LiveData<List<Venue>> getAll();
 
-    @Query("SELECT * FROM venues where venues.favourite = 1")
+    @Query("SELECT * FROM venues where favourite = 1")
     LiveData<List<Venue>> getAllFavouriteVenues();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -28,11 +28,11 @@ public class SearchPlacesViewModel extends ViewModel {
     // Main mRepository responsible for fetching data for this viewmodel
     private VenuesRepository mRepository = new VenuesRepository();
 
-    // Current search mQuery in the system. It's important to keep track of it to avoid
+    // Current search query in the system. It's important to keep track of it to avoid
     // redundant calls
     public MutableLiveData<String> mQuery = new MutableLiveData<>();
 
-    // Main data set representing the list of venues against current mQuery. UI should
+    // Main data set representing the list of venues against current query. UI should
     // not use this directly. It is not processed fully. For e.g merging favourite details
     private MutableLiveData<List<Venue>> mVenueListRaw = new MutableLiveData<List<Venue>>(){{
         // Init it with null
@@ -114,7 +114,7 @@ public class SearchPlacesViewModel extends ViewModel {
     // available. So we used SingleEventMutableLiveData. Its a custom implementation
     public SingleEventMutableLiveData<Venue> selectedVenue = new SingleEventMutableLiveData<>();
 
-    // Represent latest error occurred for current mQuery
+    // Represent latest error occurred for current query
     public SingleEventMutableLiveData<String> errorMessage = new SingleEventMutableLiveData<>();
 
     public boolean onQueryTextSubmit(String query) {
@@ -129,7 +129,7 @@ public class SearchPlacesViewModel extends ViewModel {
     }
 
     /**
-     * Perform network search against the mQuery submitted
+     * Perform network search against the query submitted
      * @param newQuery
      */
     public void search(String newQuery) {

@@ -148,7 +148,7 @@ public class SearchPlacesActivity extends AppCompatActivity {
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-        // See if we have any previous mQuery
+        // See if we have any previous query
         final String previousQuery = viewModel.mQuery.getValue();
 
         // Expand the view by default. This will going to clear viewModel.getQuery string
