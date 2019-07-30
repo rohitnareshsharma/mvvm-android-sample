@@ -76,7 +76,7 @@ public class SearchPlacesActivity extends AppCompatActivity {
 
         // If we have results display them in a map
         activityMainBinding.fab.setOnClickListener(view -> {
-            EventBus.getDefault().postSticky(new LaunchVenuesMapEvent(viewModel.venueList.getValue()));
+            EventBus.getDefault().postSticky(new LaunchVenuesMapEvent(viewModel.mVenueList.getValue()));
             Intent intent = new Intent(this, VenuesMapActivity.class);
             startActivity(intent);
         });
@@ -84,7 +84,7 @@ public class SearchPlacesActivity extends AppCompatActivity {
     }
 
     private void initObservers() {
-        viewModel.venueList.observe(this, venues -> {
+        viewModel.mVenueList.observe(this, venues -> {
             // Set the data to the list
             adapter.setData(venues);
 
@@ -151,8 +151,8 @@ public class SearchPlacesActivity extends AppCompatActivity {
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-        // See if we have any previous query
-        final String previousQuery = viewModel.query.getValue();
+        // See if we have any previous mQuery
+        final String previousQuery = viewModel.mQuery.getValue();
 
         // Expand the view by default. This will going to clear viewModel.getQuery string
         item.expandActionView();
@@ -216,7 +216,7 @@ public class SearchPlacesActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             // Save the query in db for later use.
-            // Currently this is saving suggestion only when ok is pressed on query
+            // Currently this is saving suggestion only when ok is pressed on keyboard
             // As we are using a text change listener we should save all words results.
             // That may bombard suggestions. Need to think around on this functionality.
             // FIXME

@@ -58,8 +58,9 @@ public class VenueDetailActivity extends AppCompatActivity implements OnMapReady
         }
 
         // still check for valid model.
-        // Android may recreate activities without data.
+        // Android may recreate activities without data. Process shutdown
         // Safe check for preventing crash and gracefully handling this
+        // FIXME Use savedInstanceState instead. Later
         if(venueDetailViewModel.getVenueModel() == null) {
             Log.e(TAG, "This should not have happened. venueDetailViewModel is null");
             finish();

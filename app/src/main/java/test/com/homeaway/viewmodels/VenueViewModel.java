@@ -6,6 +6,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import test.com.homeaway.models.Venue;
+import test.com.homeaway.repositories.VenuesRepository;
 
 /**
  * ViewModel representing one venue related data only.
@@ -15,6 +16,8 @@ import test.com.homeaway.models.Venue;
 public class VenueViewModel extends BaseObservable {
 
     private Venue mVenue;
+
+    private VenuesRepository repository = new VenuesRepository();
 
     public void setVenue(Venue venue) {
         mVenue = venue;
@@ -81,6 +84,28 @@ public class VenueViewModel extends BaseObservable {
             return builder.toString();
         }
         return "";
+    }
+
+    @Bindable
+    public boolean isFavourite() {
+         return mVenue.favourite;
+    }
+
+    private void favourite() {
+        mVenue.favourite = true;
+        repository.insert(mVenue);
+        notifyChange();
+    }
+
+    private void unFavourite() {
+        mVenue.favourite = false;
+        repository.delete(mVenue);
+        notifyChange();
+    }
+
+    public void toggleFavourite() {
+        if(isFavourite()) unFavourite();
+        else favourite();
     }
 
 }
