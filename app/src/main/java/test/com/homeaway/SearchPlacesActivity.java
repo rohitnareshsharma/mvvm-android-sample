@@ -48,9 +48,6 @@ public class SearchPlacesActivity extends AppCompatActivity {
     // Binding carrying all the views for this screen
     private ActivitySearchPlacesBinding activityMainBinding;
 
-    // Search Bar View
-    private SearchView searchView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +143,7 @@ public class SearchPlacesActivity extends AppCompatActivity {
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         final MenuItem item = menu.findItem(R.id.action_search);
-        searchView = (SearchView) item.getActionView();
+        SearchView searchView = (SearchView) item.getActionView();
 
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
